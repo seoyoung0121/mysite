@@ -29,8 +29,20 @@
 					
 					<fieldset>
 						<legend>성별</legend>
-						<label>여</label> <input type="radio" name="gender" value="female" <%= vo.getGender().equals("female") ? "checked=\"checked\"" : "" %>>
-						<label>남</label> <input type="radio" name="gender" value="male" <%= vo.getGender().equals("male") ? "checked=\"checked\"" : "" %>>
+						<%
+							if("female".equals(vo.getGender())){
+						%>
+						<label>여</label> <input type="radio" name="gender" value="female" checked="checked">
+						<label>남</label> <input type="radio" name="gender" value="male" >
+						<%
+							} else {
+						%>
+						<label>여</label> <input type="radio" name="gender" value="female" >
+						<label>남</label> <input type="radio" name="gender" value="male" checked="checked">
+						<%
+							}
+						%>
+						
 					</fieldset>
 
 					<input type="submit" value="수정하기">

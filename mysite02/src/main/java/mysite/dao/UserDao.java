@@ -92,7 +92,6 @@ public class UserDao {
 			sql = "update user set name = '" + vo.getName() + "', gender='" + vo.getGender() + "', password='"
 					+ vo.getPassword() + "' where id=" + vo.getId();
 		}
-		System.out.println(sql);
 		try (Connection conn = getConnection(); 
 			Statement stmt = conn.createStatement();) {
 

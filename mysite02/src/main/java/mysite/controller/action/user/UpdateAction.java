@@ -32,10 +32,7 @@ public class UpdateAction implements Action {
 		
 		vo.setPassword(null);
 		vo.setGender(null);
-//		request.setAttribute("vo", vo);
-//		
-//		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/updateform.jsp");
-//		rd.forward(request, response);
+		
 		session.setAttribute("authUser", vo);
 		response.sendRedirect(request.getContextPath()+"/user?a=updateform");
 		
