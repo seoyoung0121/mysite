@@ -1,58 +1,33 @@
 package mysite.controller;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-
-import mysite.dao.GuestbookDao;
-import mysite.vo.GuestbookVo;
+import java.util.Map;
+import mysite.controller.action.guestbook.AddAction;
+import mysite.controller.action.guestbook.DefaultAction;
+import mysite.controller.action.guestbook.DeleteAction;
+import mysite.controller.action.guestbook.DeleteFormAction;
 
 @WebServlet("/guestbook")
-public class GuestbookServlet extends HttpServlet {
+public class GuestbookServlet extends ActionServlet {
 	private static final long serialVersionUID = 1L;
        
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		String action = request.getParameter("a");
-		if("add".equals(action)) {
-			String name = request.getParameter("name");
-			String password = request.getParameter("password");
-			String contents = request.getParameter("contents");
-				
-			GuestbookVo vo = new GuestbookVo();
-			vo.setName(name);
-			vo.setPassword(password);
-			vo.setContents(contents);
-			
-			new GuestbookDao().insert(vo);
-			
-			response.sendRedirect("/mysite02/guestbook");
-			
-		} else if("deleteform".equals(action)) {
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/guestbook/deleteform.jsp");
-			rd.forward(request, response);
-		} else if("delete".equals(action)) {
-			Long id = Long.parseLong(request.getParameter("id"));
-			String password = request.getParameter("password");
-			
-			new GuestbookDao().deleteByIdAndPassword(id, password);
-			response.sendRedirect("/mysite02/guestbook");
-		} else {
-			List<GuestbookVo> list = new GuestbookDao().findAll();
-			request.setAttribute("list", list);
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/guestbook/list.jsp");
-			rd.forward(request, response);
-			// 여기 코드 적으면 web flow는 끝났는데 코드는 계속되니 어케 동작할지 모름...그냥 쓰지마 
-		}
+	private Map<String, Action> mapAction = Map.of(
+			"add", new AddAction(),
+			"deleteform", new DeleteFormAction(),
+			"delete", new DeleteAction());
+	@Override
+	public Action getAction(String actionName) {
+		return mapAction.getOrDefault(actionName, new DefaultAction());
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
+
+
 
 }
