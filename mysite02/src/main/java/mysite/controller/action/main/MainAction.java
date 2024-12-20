@@ -14,7 +14,6 @@ public class MainAction implements Action {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher rd=request.getRequestDispatcher("/WEB-INF/views/main/index.jsp");
 		rd.forward(request, response);
-
 	}
 
 }
