@@ -27,6 +27,8 @@ public class LoginAction implements Action {
 			request.setAttribute("email", email);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/loginform.jsp");
 			rd.forward(request, response);
+			
+			return;
 		}
 		
 		// 로그인 처리
