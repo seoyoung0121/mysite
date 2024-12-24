@@ -12,6 +12,7 @@ import mysite.dao.BoardDao;
 import mysite.vo.BoardVo;
 
 public class DefaultBoardAction implements Action {
+	private static final int ARTICLE_NUM = 10;
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -23,13 +24,20 @@ public class DefaultBoardAction implements Action {
 		}
 		BoardDao dao = new BoardDao();
 
-		int totalPage = dao.findTotalPage();
-		page=(page <= totalPage) ? page : totalPage;
-		List<BoardVo> list = dao.findWithPage(page);
+		int totalArticle = dao.findTotalArticle();
+		int totalPage = (int) Math.ceil((double) totalArticle / ARTICLE_NUM);
+		totalPage=(totalPage<1)?1:totalPage;
+		page = (page <= totalPage) ? page : totalPage;
+		int startArticleNum = (page - 1) * ARTICLE_NUM;
+		startArticleNum = (startArticleNum < 0) ? 0 : startArticleNum;
+		List<BoardVo> list = dao.findWithLimit(startArticleNum, ARTICLE_NUM);
+
 		request.setAttribute("list", list);
 		request.setAttribute("currentPage", page);
 		request.setAttribute("startPage", (page <= 5) ? 1 : page - 4);
 		request.setAttribute("totalPage", totalPage);
+		request.setAttribute("startArticleNum", totalArticle - startArticleNum);
+
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/board/list.jsp");
 		rd.forward(request, response);
 	}

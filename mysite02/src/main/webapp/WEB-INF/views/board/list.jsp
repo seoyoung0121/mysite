@@ -27,10 +27,9 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>	
-					<c:set var="count" value="${fn:length(list)}"/>
 					<c:forEach items="${list}" var="vo" varStatus="status">
 						<tr>
-						<td>${count-status.index}</td>
+						<td>${startArticleNum-status.index}</td>
 						<td style="text-align:left; padding-left:${vo.depth*20}px">
 							<c:if test='${vo.depth>0 }'>
 								<img src="${pageContext.request.contextPath}/assets/images/reply.png">

@@ -12,7 +12,6 @@ import java.util.List;
 import mysite.vo.BoardVo;
 
 public class BoardDao {
-	private static final int ARTICLE_NUM = 10;
 	public List<BoardVo> findall() {
 		List<BoardVo> result = new ArrayList<>();
 		
@@ -198,24 +197,8 @@ public class BoardDao {
 		
 	}
 	
-	public int findTotalPage() {
-		double num=0;
-		try(Connection conn = getConnection();
-			Statement stmt = conn.createStatement();
-			){
-			ResultSet rs = stmt.executeQuery("select count(*) from board");
-			if(rs.next()) {
-				num=rs.getDouble(1);
-			}
-			rs.close();
-			
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		}
-		return (int) Math.ceil((double) num / ARTICLE_NUM); // 여기서 하는게 맞나? 
-	}
 	
-	public List<BoardVo> findWithPage(int page) {
+	public List<BoardVo> findWithLimit(int startNum, int count) {
 		List<BoardVo> result = new ArrayList<>();
 		
 		try (Connection conn = getConnection();
@@ -226,8 +209,8 @@ public class BoardDao {
 															+ "order by g_no desc, o_no asc "
 															+ "limit ?,?");
 			){
-			pstmt.setInt(1, (page-1)*ARTICLE_NUM);
-			pstmt.setInt(2, 10);
+			pstmt.setInt(1,startNum );
+			pstmt.setInt(2, count);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
@@ -260,6 +243,23 @@ public class BoardDao {
 			System.out.println("error:" + e);
 		} 
 		return result;
+	}
+	
+	public int findTotalArticle() {
+		int num=0;
+		try(Connection conn = getConnection();
+			Statement stmt = conn.createStatement();
+			){
+				ResultSet rs = stmt.executeQuery("select count(*) from board");
+				if(rs.next()) {
+					num=rs.getInt(1);
+				}
+				rs.close();
+				
+			} catch (SQLException e) {
+				System.out.println("error:" + e);
+			}
+		return num;
 	}
 	
 	private Connection getConnection() throws SQLException {

@@ -37,7 +37,10 @@
 					<c:if test="${authUser.id==vo.userId}">
 						<a href="${pageContext.request.contextPath}/board?a=modifyform&id=${vo.id}&userId=${vo.userId}">글수정</a>
 					</c:if>
-					<a href="${pageContext.request.contextPath}/board?a=writeform&gNo=${vo.gNo}&oNo=${vo.oNo}&depth=${vo.depth}">답글달기</a>
+					<c:if test="${not empty authUser}">
+						<a href="${pageContext.request.contextPath}/board?a=writeform&gNo=${vo.gNo}&oNo=${vo.oNo}&depth=${vo.depth}">답글달기</a>
+					</c:if>
+					
 				</div>
 			</div>
 		</div>
