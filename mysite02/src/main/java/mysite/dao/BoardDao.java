@@ -12,7 +12,7 @@ import java.util.List;
 import mysite.vo.BoardVo;
 
 public class BoardDao {
-
+	private static final int ARTICLE_NUM = 10;
 	public List<BoardVo> findall() {
 		List<BoardVo> result = new ArrayList<>();
 		
@@ -196,6 +196,70 @@ public class BoardDao {
 			System.out.println("error:" + e);
 		}
 		
+	}
+	
+	public int findTotalPage() {
+		double num=0;
+		try(Connection conn = getConnection();
+			Statement stmt = conn.createStatement();
+			){
+			ResultSet rs = stmt.executeQuery("select count(*) from board");
+			if(rs.next()) {
+				num=rs.getDouble(1);
+			}
+			rs.close();
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+		return (int) Math.ceil((double) num / ARTICLE_NUM); // 여기서 하는게 맞나? 
+	}
+	
+	public List<BoardVo> findWithPage(int page) {
+		List<BoardVo> result = new ArrayList<>();
+		
+		try (Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("select a.id, a.title, a.contents, a.hit, date_format(a.reg_date, '%Y-%m-%d %h:%i:%s'), "
+															+ "a.g_no, a.o_no, a.depth, a.user_id, b.name "
+															+ "from board a, user b "
+															+ "where a.user_id=b.id "
+															+ "order by g_no desc, o_no asc "
+															+ "limit ?,?");
+			){
+			pstmt.setInt(1, (page-1)*ARTICLE_NUM);
+			pstmt.setInt(2, 10);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				Long id = rs.getLong(1);
+				String title = rs.getString(2);
+				String contents = rs.getString(3);
+				int hit = rs.getInt(4);
+				String regDate=rs.getString(5);
+				int gNo = rs.getInt(6);
+				int oNo = rs.getInt(7);
+				int depth = rs.getInt(8);
+				Long userId = rs.getLong(9);
+				String userName = rs.getString(10);
+				
+
+				BoardVo vo = new BoardVo();
+				vo.setId(id);
+				vo.setTitle(title);
+				vo.setContents(contents);
+				vo.setHit(hit);
+				vo.setRegDate(regDate);
+				vo.setgNo(gNo);
+				vo.setoNo(oNo);
+				vo.setDepth(depth);
+				vo.setUserId(userId);
+				vo.setUserName(userName);
+				result.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} 
+		return result;
 	}
 	
 	private Connection getConnection() throws SQLException {

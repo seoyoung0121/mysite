@@ -15,8 +15,21 @@ public class DefaultBoardAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<BoardVo> list = new BoardDao().findall();
+		int page = 1;
+		String pageParam = request.getParameter("page");
+		if (pageParam != null && !pageParam.isEmpty()) {
+			page = Integer.parseInt(pageParam);
+			page = (page < 1) ? 1 : page;
+		}
+		BoardDao dao = new BoardDao();
+
+		int totalPage = dao.findTotalPage();
+		page=(page <= totalPage) ? page : totalPage;
+		List<BoardVo> list = dao.findWithPage(page);
 		request.setAttribute("list", list);
+		request.setAttribute("currentPage", page);
+		request.setAttribute("startPage", (page <= 5) ? 1 : page - 4);
+		request.setAttribute("totalPage", totalPage);
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/board/list.jsp");
 		rd.forward(request, response);
 	}

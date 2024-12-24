@@ -27,9 +27,10 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>	
-					<c:forEach items="${list}" var="vo">
+					<c:set var="count" value="${fn:length(list)}"/>
+					<c:forEach items="${list}" var="vo" varStatus="status">
 						<tr>
-						<td>${vo.id}</td>
+						<td>${count-status.index}</td>
 						<td style="text-align:left; padding-left:${vo.depth*20}px">
 							<c:if test='${vo.depth>0 }'>
 								<img src="${pageContext.request.contextPath}/assets/images/reply.png">
@@ -51,15 +52,37 @@
 				<!-- pager 추가 -->
 				<div class="pager">
 					<ul>
-						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
-						<li class="selected">2</li>
-						<li><a href="">3</a></li>
-						<li>4</li>
-						<li>5</li>
-						<li><a href="">▶</a></li>
+						<c:if test="${startPage-1>0}">
+							<li><a href="${pageContext.request.contextPath}/board?page=${startPage-1}">◀</a></li>
+						</c:if>
+						<c:if test="${startPage-1<=0}">
+							<li>◀</li>
+						</c:if>
+						
+						
+						<c:forEach begin="${startPage}" end="${currentPage-1}" step="1" var="i">
+							<li><a href="${pageContext.request.contextPath}/board?page=${i}">${i}</a></li>
+						</c:forEach>
+						<li class="selected">${currentPage}</li>
+						<c:forEach begin="${currentPage+1}" end="${startPage+4}" step="1" var="i">
+							<c:if  test="${i<=totalPage}">
+								<li><a href="${pageContext.request.contextPath}/board?page=${i}">${i}</a></li>
+							</c:if>
+							<c:if  test="${i>totalPage}">
+								<li>${i}</li>
+							</c:if>
+						</c:forEach>
+						
+						
+						<c:if test="${startPage+4<totalPage}">
+							<li><a href="${pageContext.request.contextPath}/board?page=${startPage+5}">▶</a></li>
+						</c:if>
+						<c:if test="${startPage+4>=totalPage}">
+							<li>▶</li>
+						</c:if>
 					</ul>
-				</div>					
+				</div>	
+							
 				<!-- pager 추가 -->
 				
 				<c:if test="${not empty authUser}">

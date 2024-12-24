@@ -30,8 +30,7 @@
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<textarea id="content" name="content">
-									${fn:replace(vo.contents,newline,"<br>")}</textarea>
+								<textarea id="content" name="content">${vo.contents}</textarea>
 							</td>
 						</tr>
 					</table>
