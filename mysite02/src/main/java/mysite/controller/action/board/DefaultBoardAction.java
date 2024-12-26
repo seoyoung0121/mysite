@@ -34,7 +34,7 @@ public class DefaultBoardAction implements Action {
 
 		request.setAttribute("list", list);
 		request.setAttribute("currentPage", page);
-		request.setAttribute("startPage", (page <= 5) ? 1 : page - 4);
+		request.setAttribute("startPage", (page-1)/5*5+1);
 		request.setAttribute("totalPage", totalPage);
 		request.setAttribute("startArticleNum", totalArticle - startArticleNum);
 
@@ -42,4 +42,4 @@ public class DefaultBoardAction implements Action {
 		rd.forward(request, response);
 	}
 
-}
+} 
