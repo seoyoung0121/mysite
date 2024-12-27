@@ -11,7 +11,7 @@ import mysite.vo.GuestbookVo;
 public class GuestbookService {
 	private GuestbookRepository guestbookRepository;
 	
-	public GuestbookService() {
+	public GuestbookService(GuestbookRepository guestbookRepository) {
 		this.guestbookRepository=guestbookRepository;
 	}
 	
@@ -20,10 +20,10 @@ public class GuestbookService {
 	}
 	
 	public void deleteContents(Long id, String password) {
-		
+		guestbookRepository.deleteByIdAndPassword(id, password);
 	}
 	
 	public void addContents(GuestbookVo vo) {
-		
+		guestbookRepository.insert(vo);
 	}
 }

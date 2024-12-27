@@ -9,8 +9,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import mysite.vo.BoardVo;
 
+@Repository
 public class BoardRepository {
 	public List<BoardVo> findall() {
 		List<BoardVo> result = new ArrayList<>();
