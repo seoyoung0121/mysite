@@ -15,10 +15,10 @@ public class DeleteAction implements Action {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long id = Long.parseLong(request.getParameter("id"));
-		Long userId = Long.parseLong(request.getParameter("userId")); // userId를 sql 쿼리 통해서 아는게 낫나?
+		Long userId = Long.parseLong(request.getParameter("userId")); 
 		HttpSession session = request.getSession();
 		UserVo vo = (UserVo) session.getAttribute("authUser"); 
-		if(vo==null || !vo.getId().equals(userId)) { // 여기서 검증하는게 맞나? 
+		if(vo==null || !vo.getId().equals(userId)) { 
 			response.sendRedirect(request.getContextPath()+"/board");
 			return;
 		}

@@ -17,7 +17,7 @@ public class WriteAction implements Action {
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		HttpSession session = request.getSession();
-		UserVo vo = (UserVo) session.getAttribute("authUser"); // 이거랑 jsp에서 받아오는 것 중에 뭐가 더 나음? 
+		UserVo vo = (UserVo) session.getAttribute("authUser"); 
 		if(vo==null) {
 			response.sendRedirect(request.getContextPath()+"/board");
 			return;
