@@ -15,8 +15,7 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board">
-					<input type="hidden" name="a" value="modify">
+				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/modify">
 					<input type="hidden" name="id" value="${vo.id}">
 					<input type="hidden" name="userId" value="${vo.userId}">
 					<table class="tbl-ex">
@@ -35,7 +34,7 @@
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="${pageContext.request.contextPath}/board?a=view&id=${vo.id}">취소</a>
+						<a href="${pageContext.request.contextPath}/board/view&id=${vo.id}">취소</a>
 						<input type="submit" value="수정">
 					</div>
 				</form>				
