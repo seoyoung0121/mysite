@@ -15,9 +15,11 @@
 		<div id="content">
 			<div id="board">
 				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/write">
-					<input type = "hidden" name = "gNo" value="${param.gNo}">
-					<input type = "hidden" name = "oNo" value="${param.oNo}">
-					<input type = "hidden" name = "depth" value="${param.depth}">
+					<c:if test="${not empty param}">
+						<input type = "hidden" name = "gNo" value="${param.gNo}">
+						<input type = "hidden" name = "oNo" value="${param.oNo}">
+						<input type = "hidden" name = "depth" value="${param.depth}">
+					</c:if>
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글쓰기</th>
@@ -29,7 +31,7 @@
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<textarea id="content" name="content"></textarea>
+								<textarea id="content" name="contents"></textarea>
 							</td>
 						</tr>
 					</table>

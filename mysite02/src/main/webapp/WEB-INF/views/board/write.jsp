@@ -14,8 +14,7 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board">
-					<input type = "hidden" name = "a" value="write">
+				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/write">
 					<input type = "hidden" name = "gNo" value="${param.gNo}">
 					<input type = "hidden" name = "oNo" value="${param.oNo}">
 					<input type = "hidden" name = "depth" value="${param.depth}">
@@ -30,7 +29,7 @@
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<textarea id="content" name="content"></textarea>
+								<textarea id="contents" name="contents"></textarea>
 							</td>
 						</tr>
 					</table>
