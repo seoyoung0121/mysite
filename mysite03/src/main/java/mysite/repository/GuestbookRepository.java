@@ -10,17 +10,23 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import mysite.vo.GuestbookVo;
 
 @Repository
 public class GuestbookRepository {
+	@Autowired
 	private DataSource dataSource;
 	
-	public GuestbookRepository(DataSource dataSource) {
-		this.dataSource=dataSource;
+	private SqlSession sqlSession;
+	
+	public GuestbookRepository(SqlSession sqlSession) {
+		this.sqlSession=sqlSession;
 	}
+	
 	public List<GuestbookVo> findAll() {
 		List<GuestbookVo> result = new ArrayList<>();
 		
