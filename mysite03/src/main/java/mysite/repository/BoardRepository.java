@@ -9,16 +9,23 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.stereotype.Repository;
 
 import mysite.vo.BoardVo;
 
 @Repository
 public class BoardRepository {
+	private DataSource dataSource;
+	
+	public BoardRepository(DataSource dataSource) {
+		this.dataSource=dataSource;
+	}
 	public List<BoardVo> findall() {
 		List<BoardVo> result = new ArrayList<>();
 		
-		try (Connection conn = getConnection();
+		try (Connection conn = dataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement("select a.id, a.title, a.contents, a.hit, date_format(a.reg_date, '%Y-%m-%d %h:%i:%s'), a.g_no, a.o_no, a.depth, a.user_id, b.name "
 															+ "from board a, user b where a.user_id=b.id order by g_no desc, o_no asc");
 			ResultSet rs = pstmt.executeQuery();
@@ -57,7 +64,7 @@ public class BoardRepository {
 	}
 	
 	public void addArticle(String title, String content, Long userId) {
-		try(Connection conn = getConnection();
+		try(Connection conn = dataSource.getConnection();
 			Statement stmt = conn.createStatement();
 			PreparedStatement pstmt = conn.prepareStatement("insert into board values (null, ?, ?, 0, now(), ?, 1, 0, ? )");
 			){
@@ -85,7 +92,7 @@ public class BoardRepository {
 	
 	public void addReplyArticle(int gNo, int oNo, int depth, String title, String content, Long userId) {
 		
-		try(Connection conn = getConnection();
+		try(Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt1 = conn.prepareStatement("update board set o_no=o_no+1 where o_no>= ?");
 				PreparedStatement pstmt2 = conn.prepareStatement("insert into board values (null, ?, ?, 0, now(), ?, ?, ?, ? )");
 				
@@ -115,7 +122,7 @@ public class BoardRepository {
 	}
 	
 	public void deleteById(Long id) {
-		try(Connection conn = getConnection();
+		try(Connection conn = dataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement("delete from board where id = ?");
 			){
 			pstmt.setLong(1, id);
@@ -129,7 +136,7 @@ public class BoardRepository {
 	
 	public BoardVo findById(Long id) {
 		BoardVo vo = new BoardVo();
-		try (Connection conn = getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("select a.title, a.contents, a.hit, date_format(a.reg_date, '%Y-%m-%d %h:%i:%s'), a.g_no, a.o_no, a.depth, a.user_id, b.name "
 																+ "from board a, user b where a.user_id=b.id and a.id= ? order by g_no desc, o_no asc");
 				){
@@ -169,7 +176,7 @@ public class BoardRepository {
 	}
 	
 	public void updateById(Long id, String title, String contents) {
-		try(Connection conn = getConnection();
+		try(Connection conn = dataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement("update board set title = ?, contents = ? where id = ?");
 			){
 				pstmt.setString(1, title);
@@ -185,7 +192,7 @@ public class BoardRepository {
 	}
 	
 	public void updateHitById(Long id) {
-		try(Connection conn = getConnection();
+		try(Connection conn = dataSource.getConnection();
 			PreparedStatement pstmt= conn.prepareStatement("update board set hit = hit+1 where id = ?");
 			){
 			
@@ -204,7 +211,7 @@ public class BoardRepository {
 	public List<BoardVo> findWithLimit(int startNum, int count) {
 		List<BoardVo> result = new ArrayList<>();
 		
-		try (Connection conn = getConnection();
+		try (Connection conn = dataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement("select a.id, a.title, a.contents, a.hit, date_format(a.reg_date, '%Y-%m-%d %h:%i:%s'), "
 															+ "a.g_no, a.o_no, a.depth, a.user_id, b.name "
 															+ "from board a, user b "
@@ -250,7 +257,7 @@ public class BoardRepository {
 	
 	public int findTotalArticle() {
 		int num=0;
-		try(Connection conn = getConnection();
+		try(Connection conn = dataSource.getConnection();
 			Statement stmt = conn.createStatement();
 			){
 				ResultSet rs = stmt.executeQuery("select count(*) from board");
@@ -264,21 +271,6 @@ public class BoardRepository {
 			}
 		return num;
 	}
-	
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
 
-			String url = "jdbc:mariadb://192.168.0.18:3306/webdb";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		}
-		return conn;
-	}
 
 }

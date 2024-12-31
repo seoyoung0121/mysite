@@ -7,17 +7,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.sql.DataSource;
+
 import org.springframework.stereotype.Repository;
 
 import mysite.vo.UserVo;
 
 @Repository
 public class UserRepository {
-
+	private DataSource dataSource;
+	
+	public UserRepository(DataSource dataSource) {
+		this.dataSource=dataSource;
+	}
 	public int insert(UserVo vo) {
 		int count = 0;
 
-		try (Connection conn = getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("insert into user values(null, ?, ?, ?, ?, now(),'USER')");) {
 
 			pstmt.setString(1, vo.getName());
@@ -37,7 +43,7 @@ public class UserRepository {
 	public UserVo findByEmailAndPassword(String email, String password) {
 		UserVo userVo = null;
 
-		try (Connection conn = getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn
 						.prepareStatement("select id, name, role from user where email=? and password=?");) {
 
@@ -65,7 +71,7 @@ public class UserRepository {
 	public UserVo findById(Long id) {
 		UserVo userVo = null;
 
-		try (Connection conn = getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement("select email, name, gender from user where id=?");) {
 
 			pstmt.setLong(1, id);
@@ -97,7 +103,7 @@ public class UserRepository {
 			sql = "update user set name = '" + vo.getName() + "', gender='" + vo.getGender() + "', password='"
 					+ vo.getPassword() + "' where id=" + vo.getId();
 		}
-		try (Connection conn = getConnection(); 
+		try (Connection conn = dataSource.getConnection(); 
 			Statement stmt = conn.createStatement();) {
 
 			stmt.executeUpdate(sql);
@@ -106,22 +112,6 @@ public class UserRepository {
 			System.out.println("error:" + e);
 		}
 
-	}
-
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-
-			String url = "jdbc:mariadb://192.168.0.18:3306/webdb";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		}
-		return conn;
 	}
 
 }
