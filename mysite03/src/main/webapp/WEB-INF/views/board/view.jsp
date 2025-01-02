@@ -38,7 +38,7 @@
 						<a href="${pageContext.request.contextPath}/board/modify?id=${vo.id}&userId=${vo.userId}">글수정</a>
 					</c:if>
 					<c:if test="${not empty authUser}">
-						<a href="${pageContext.request.contextPath}/board/write?gNo=${vo.gNo}&oNo=${vo.oNo}&depth=${vo.depth}">답글달기</a>
+						<a href="${pageContext.request.contextPath}/board/write?gNo=${vo.gNo}&oNo=${vo.oNo+1}&depth=${vo.depth+1}">답글달기</a>
 					</c:if>
 					
 				</div>

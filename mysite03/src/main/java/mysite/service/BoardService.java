@@ -18,12 +18,7 @@ public class BoardService {
 		this.boardRepository=boardRepository;
 	}
 	public void addContents(BoardVo vo) {
-		if(vo.getoNo()==0) {
-			boardRepository.addArticle(vo.getTitle(), vo.getContents(), vo.getUserId());
-		}
-		else {
-			boardRepository.addReplyArticle(vo.getgNo(), vo.getoNo(), vo.getDepth(),vo.getTitle(), vo.getContents(), vo.getUserId());
-		}
+		boardRepository.addArticle(vo);
 	}
 	
 	public BoardVo getContents(Long id) {
@@ -59,7 +54,6 @@ public class BoardService {
 		int startArticleNum = (currentPage - 1) * ARTICLE_NUM;
 		startArticleNum = (startArticleNum < 0) ? 0 : startArticleNum;
 		List<BoardVo> list = boardRepository.findWithLimit(startArticleNum, ARTICLE_NUM);
-		
 		Map<String, Object> map = new HashMap();
 		map.put("list", list);
 		map.put("currentPage", currentPage);
