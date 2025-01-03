@@ -43,6 +43,10 @@
 			<mvc:exclude-mapping path="/assets/**"/>
 			<bean class="mysite.security.AuthInterceptor"/>
 		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="mysite.security.TitleInterceptor"/>
+		</mvc:interceptor>
 	</mvc:interceptors>
 	
 	<!-- View Resolver -->
