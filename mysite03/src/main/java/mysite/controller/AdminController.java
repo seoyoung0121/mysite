@@ -32,15 +32,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public String updateSite(@RequestParam("title") String title,
-	        @RequestParam("welcome") String welcome,
-	        @RequestParam("description") String description,
-	        @RequestParam("file") MultipartFile file) {
-		
-		SiteVo vo = new SiteVo();
-	    vo.setTitle(title);
-	    vo.setWelcome(welcome);
-	    vo.setDescription(description);
+	public String updateSite(SiteVo vo, @RequestParam("file") MultipartFile file) {
 	    
 		if(!file.isEmpty()) {
 			vo.setProfile(fileUploadService.restore(file));
