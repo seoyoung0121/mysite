@@ -13,9 +13,6 @@ import mysite.vo.BoardVo;
 
 @Repository
 public class BoardRepository {
-	@Autowired
-	private DataSource dataSource;
-	
 	private SqlSession sqlSession;
 	
 	public BoardRepository(SqlSession sqlSession) {
