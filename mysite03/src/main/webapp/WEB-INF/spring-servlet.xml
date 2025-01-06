@@ -84,6 +84,9 @@
 	   <property name="order" value="1" />
 	</bean>
 	
+	<!-- ApplicationContextEventListener -->
+	<bean class="mysite.event.ApplicationContextEventListener"/>
+	
 	<context:annotation-config />
 	<context:component-scan base-package="mysite.controller, mysite.exception" />
 
