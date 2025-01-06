@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import mysite.service.FileUploadService;
+import jakarta.servlet.http.HttpServletRequest;
 import mysite.service.SiteService;
 import mysite.vo.SiteVo;
 
@@ -17,7 +17,7 @@ public class MainController {
 	}
 	
 	@RequestMapping({"/","/main"})
-	public String index(Model model) {
+	public String index(HttpServletRequest request, Model model) {
 		SiteVo vo= siteService.getSite();
 		model.addAttribute("siteVo", vo);
 		return "main/index";
