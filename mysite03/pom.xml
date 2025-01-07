@@ -80,6 +80,13 @@
        <version>3.4.0</version>
    </dependency>   
    
+   <!-- Spring Aspects -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-aspects</artifactId>
+  		<version>${org.springframework-version}</version>
+  	</dependency>
+   
    <!-- Logback --> 
 	<dependency>                                    
 		<groupId>org.slf4j</groupId>                
