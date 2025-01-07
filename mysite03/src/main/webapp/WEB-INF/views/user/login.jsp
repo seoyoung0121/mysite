@@ -1,7 +1,7 @@
 <%@ taglib uri="jakarta.tags.core" prefix ="c" %>
 <%@ taglib uri="jakarta.tags.fmt" prefix ="fmt" %>
 <%@ taglib uri="jakarta.tags.functions" prefix ="fn" %>
-<%@page import="java.util.Optional"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!doctype html>
 <html>
@@ -19,16 +19,17 @@
 					<c:set var="email" value=""/>
 				</c:if>
 				<form id="login-form" name="loginform" method="post" action="${pageContext.request.contextPath}/user/auth">
-					<label class="block-label" for="email">이메일</label>
+					<label class="block-label" for="email"><spring:message code="user.signin.label.email"/></label>
 					<input id="email" name="email" type="text" value="${email}">
-					<label class="block-label" >패스워드</label>
+					<label class="block-label" ><spring:message code="user.signin.label.password"/></label>
 					<input name="password" type="password" value="">
 					<c:if test='${result == "fail"}'>
 						<p >
-							로그인이 실패 했습니다.
+							<spring:message code="user.signin.fail"/>
 						</p>
 					</c:if>
-					<input type="submit" value="로그인">
+					<spring:message code="user.signin.button.text" var="loginButton"/>
+					<input type="submit" value="${loginButton}">
 				</form>
 			</div>
 		</div>
