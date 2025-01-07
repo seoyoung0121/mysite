@@ -1,5 +1,7 @@
 package mysite.controller;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +22,13 @@ public class AdminController {
 	private final SiteService siteService;
 	private final FileUploadService fileUploadService;
 	private final ServletContext servletContext;
+	private final ApplicationContext applicationContext;
 	
-	public AdminController(SiteService siteService, FileUploadService fileUploadService, ServletContext servletContext) {
+	public AdminController(SiteService siteService, FileUploadService fileUploadService, ServletContext servletContext, ApplicationContext applicationContext) {
 		this.siteService=siteService;
 		this.fileUploadService=fileUploadService;
 		this.servletContext=servletContext;
+		this.applicationContext=applicationContext;
 	}
 	
 	@RequestMapping({"", "/main"})
@@ -45,7 +49,13 @@ public class AdminController {
 			siteVo.setProfile(vo.getProfile());
 		}
 		siteService.updateSite(siteVo);
+		
+		// update servlet context bean
 		servletContext.setAttribute("siteVo", siteVo);
+		
+		// update application context bean
+		SiteVo site = applicationContext.getBean(SiteVo.class);
+		BeanUtils.copyProperties(siteVo, site);
 		
 		return"redirect:/";
 	}
