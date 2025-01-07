@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.ServletContext;
 import mysite.security.Auth;
 import mysite.service.FileUploadService;
 import mysite.service.SiteService;
@@ -16,12 +17,14 @@ import mysite.vo.SiteVo;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-	private SiteService siteService;
-	private FileUploadService fileUploadService;
+	private final SiteService siteService;
+	private final FileUploadService fileUploadService;
+	private final ServletContext servletContext;
 	
-	public AdminController(SiteService siteService, FileUploadService fileUploadService) {
+	public AdminController(SiteService siteService, FileUploadService fileUploadService, ServletContext servletContext) {
 		this.siteService=siteService;
 		this.fileUploadService=fileUploadService;
+		this.servletContext=servletContext;
 	}
 	
 	@RequestMapping({"", "/main"})
@@ -32,12 +35,18 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public String updateSite(SiteVo vo, @RequestParam("file") MultipartFile file) {
+	public String updateSite(SiteVo siteVo, @RequestParam("file") MultipartFile file) {
 	    
 		if(!file.isEmpty()) {
-			vo.setProfile(fileUploadService.restore(file));
+			siteVo.setProfile(fileUploadService.restore(file));
 		}
-		siteService.updateSite(vo);
+		else {
+			SiteVo vo=(SiteVo)servletContext.getAttribute("siteVo");
+			siteVo.setProfile(vo.getProfile());
+		}
+		siteService.updateSite(siteVo);
+		servletContext.setAttribute("siteVo", siteVo);
+		
 		return"redirect:/";
 	}
 	
