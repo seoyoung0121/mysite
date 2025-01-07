@@ -44,10 +44,7 @@ public class AdminController {
 		if(!file.isEmpty()) {
 			siteVo.setProfile(fileUploadService.restore(file));
 		}
-		else {
-			SiteVo vo=(SiteVo)servletContext.getAttribute("siteVo");
-			siteVo.setProfile(vo.getProfile());
-		}
+
 		siteService.updateSite(siteVo);
 		
 		// update servlet context bean
