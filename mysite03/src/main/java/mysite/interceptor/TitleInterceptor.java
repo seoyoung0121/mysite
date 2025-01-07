@@ -23,8 +23,7 @@ public class TitleInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		SiteVo vo= siteService.getSite();
-		servletContext.setAttribute("title", vo.getTitle());
-		//request.setAttribute("title", vo.getTitle());
+		servletContext.setAttribute("siteVo", vo);
 		return true;
 		
 	}

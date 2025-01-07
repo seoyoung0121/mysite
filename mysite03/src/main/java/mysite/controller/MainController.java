@@ -10,16 +10,9 @@ import mysite.vo.SiteVo;
 
 @Controller
 public class MainController {
-	private SiteService siteService;
-	
-	public MainController(SiteService siteService) {
-		this.siteService=siteService;
-	}
 	
 	@RequestMapping({"/","/main"})
 	public String index(HttpServletRequest request, Model model) {
-		SiteVo vo= siteService.getSite();
-		model.addAttribute("siteVo", vo);
 		return "main/index";
 	}
 }
