@@ -9,6 +9,36 @@
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href="${pageContext.request.contextPath}/assets/css/user.css" rel="stylesheet" type="text/css">
+<script src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.9.0.js"></script>
+<script>
+	$(function(){
+		var el = $("#btn-check");
+		el.click(function(){
+			var email = $("#email").val();
+			if(email==""){
+				return;
+			}
+			$.ajax({
+				url: "${pageContext.request.contextPath}/api/user/checkemail?email="+email,
+				type: "get",
+				dataType: "json",
+				success: function(response){
+					if(response.exist){
+						alert("이메일이 존재합니다. 다른 이메일을 사용해 주세요.");
+						$("#email").val("");
+						$("#email").focus();
+						return;
+					}
+					$("#img-check").show();
+					$("#btn-check").hide();
+				},
+				error: function(xhr, status, err){
+					console.error(err);				
+				}
+			});
+		});
+	});
+</script>
 </head>
 <body>
 	<div id="container">
@@ -34,8 +64,8 @@
 						<form:errors path="email"/>
 					</p>
 					<spring:message code="user.join.label.email.check" var="idCheck"/>
-					<input type="button" value="${idCheck}">
-					<img id = "img-check" src="${pageContext.request.contextPath}/assets/images/check.png" style="vertical-align: bottom; width:24px;">
+					<input id="btn-check" type="button" value="${idCheck}">
+					<img id = "img-check" src="${pageContext.request.contextPath}/assets/images/check.png" style="vertical-align: bottom; width:24px; display:none">
 					
 					<label class="block-label"><spring:message code="user.join.label.password"/></label>
 					<form:password path="password"/>
