@@ -35,6 +35,7 @@
 					</p>
 					<spring:message code="user.join.label.email.check" var="idCheck"/>
 					<input type="button" value="${idCheck}">
+					<img id = "img-check" src="${pageContext.request.contextPath}/assets/images/check.png" style="vertical-align: bottom; width:24px;">
 					
 					<label class="block-label"><spring:message code="user.join.label.password"/></label>
 					<form:password path="password"/>
