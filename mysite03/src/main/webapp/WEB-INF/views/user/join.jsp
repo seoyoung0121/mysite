@@ -60,12 +60,12 @@
 					
 					<label class="block-label" for="email"><spring:message code="user.join.label.email"/></label>
 					<form:input path="email"/>
+					<spring:message code="user.join.label.email.check" var="idCheck"/>
+					<input id="btn-check" type="button" value="${idCheck}" style="display:;">
+					<img id = "img-check" src="${pageContext.request.contextPath}/assets/images/check.png" style="vertical-align: bottom; width:24px; display:none">
 					<p style="padding: 5px 0; margin:0; color:#f00">
 						<form:errors path="email"/>
 					</p>
-					<spring:message code="user.join.label.email.check" var="idCheck"/>
-					<input id="btn-check" type="button" value="${idCheck}">
-					<img id = "img-check" src="${pageContext.request.contextPath}/assets/images/check.png" style="vertical-align: bottom; width:24px; display:none">
 					
 					<label class="block-label"><spring:message code="user.join.label.password"/></label>
 					<form:password path="password"/>
