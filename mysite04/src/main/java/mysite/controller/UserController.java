@@ -69,4 +69,14 @@ public class UserController {
 		authUser.setName(userVo.getName());
 		return "redirect:/user/update";
 	}
+	
+	@RequestMapping("/auth")
+	public void auth() {
+		
+	}
+	
+	@RequestMapping("/logout")
+	public void logout() {
+		
+	}
 }
