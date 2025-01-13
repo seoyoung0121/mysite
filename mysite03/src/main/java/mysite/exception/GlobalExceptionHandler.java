@@ -1,5 +1,6 @@
 package mysite.exception;
 
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
@@ -9,6 +10,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,6 +37,12 @@ public class GlobalExceptionHandler {
 		if(accept.matches(".*applicaion/json.*")) {
 			// 3. JSON 응답 
 			JsonResult jsonResult = JsonResult.fail(errors.toString());
+			String jsonString = new ObjectMapper().writeValueAsString(jsonResult);
+			response.setStatus(HttpServletResponse.SC_OK);
+			response.setContentType("application/json; chatset=utf-8");
+			OutputStream os = response.getOutputStream();
+			os.write(jsonString.getBytes("utf-8"));
+			os.close();
 		} else {
 			// 4. 사과 페이지(종료)
 			request.setAttribute("errors", errors.toString());
