@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -36,17 +37,22 @@ public class GlobalExceptionHandler {
 		
 		if(accept.matches(".*applicaion/json.*")) {
 			// 3. JSON 응답 
-			JsonResult jsonResult = JsonResult.fail(errors.toString());
+			JsonResult jsonResult = JsonResult.fail(e instanceof NoHandlerFoundException? "Unknown API URL" : errors.toString());
 			String jsonString = new ObjectMapper().writeValueAsString(jsonResult);
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setContentType("application/json; chatset=utf-8");
 			OutputStream os = response.getOutputStream();
 			os.write(jsonString.getBytes("utf-8"));
 			os.close();
-		} else {
-			// 4. 사과 페이지(종료)
-			request.setAttribute("errors", errors.toString());
-			request.getRequestDispatcher("/WEB-INF/views/errors/exception.jsp").forward(request, response);
+			return;
+		} 
+		
+		// 4. HTML 응답: 사과 페이지(종료)
+		if(e instanceof NoHandlerFoundException) {
+			request.getRequestDispatcher("/WEB-INF/views/errors/404.jsp").forward(request, response);
 		}
+		request.setAttribute("errors", errors.toString());
+		request.getRequestDispatcher("/WEB-INF/views/errors/exception.jsp").forward(request, response);
+		
 	}
 }
