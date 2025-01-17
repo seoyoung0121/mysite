@@ -4,8 +4,12 @@ import java.util.Map;
 
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import mysite.security.UserDetailsImpl;
 import mysite.vo.UserVo;
 
 @Repository
@@ -24,8 +28,9 @@ public class UserRepository {
 		return sqlSession.selectOne("user.findByEmailAndPassword", Map.of("email", email, "password", password));
 	}
 	
-	public UserVo findByEmail(String email) {
-		return sqlSession.selectOne("user.findByEmail", email);
+	public <R> R findByEmail(String email, Class<R> resultType) {
+		Map<String, Object> map = sqlSession.selectOne("user.findByEmail", email);
+		return new ObjectMapper().convertValue(map, resultType);
 	}
 
 	public UserVo findById(Long id) {
