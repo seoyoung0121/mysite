@@ -2,6 +2,7 @@ package mysite.controller;
 
 import java.util.Map;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 import mysite.security.Auth;
-import mysite.security.AuthUser;
 import mysite.service.BoardService;
 import mysite.vo.BoardVo;
 import mysite.vo.UserVo;
@@ -62,7 +62,8 @@ public class BoardController {
 	
 	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.POST)
-	public String write(@AuthUser UserVo authUser, BoardVo boardVo) {
+	public String write(Authentication authentication, BoardVo boardVo) {
+		UserVo authUser = (UserVo)authentication.getPrincipal();
 		if(authUser == null) {
 			return "redirect:/board";
 		}
@@ -74,8 +75,8 @@ public class BoardController {
 	
 	@Auth
 	@RequestMapping("/delete")
-	public String delete(@AuthUser UserVo authUser, @RequestParam("id") Long id) {
-		
+	public String delete(Authentication authentication, @RequestParam("id") Long id) {
+		UserVo authUser = (UserVo)authentication.getPrincipal();
 		if(authUser == null) {
 			return "redirect:/board";
 		}
@@ -87,8 +88,8 @@ public class BoardController {
 	
 	@Auth
 	@RequestMapping(value="/modify", method=RequestMethod.GET)
-	public String modify(@AuthUser UserVo authUser, @RequestParam("id") Long id, Model model) {
-		
+	public String modify(Authentication authentication, @RequestParam("id") Long id, Model model) {
+		UserVo authUser = (UserVo)authentication.getPrincipal();
 		if(authUser == null) {
 			return "redirect:/board";
 		}
@@ -102,7 +103,8 @@ public class BoardController {
 	
 	@Auth
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
-	public String modify(@AuthUser UserVo authUser, BoardVo boardVo) {
+	public String modify(Authentication authentication, BoardVo boardVo) {
+		UserVo authUser = (UserVo)authentication.getPrincipal();
 		if(authUser == null || authUser.getId()!=boardVo.getUserId()) {
 			return "redirect:/board";
 		}
