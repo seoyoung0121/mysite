@@ -36,9 +36,7 @@ public class SecurityConfig implements WebMvcConfigurer{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	    http
-	    	.csrf((csrf)->{
-	    		csrf.disable();
-	    	})
+	    	.csrf((csrf)->{csrf.disable();})
 	    	.formLogin((formLogin)->{
 	    		formLogin
 	    			.loginPage("/user/login")
@@ -59,7 +57,12 @@ public class SecurityConfig implements WebMvcConfigurer{
 						}
 	    			});
 	    	})
-	    	.authorizeHttpRequests((authorizeRequests)->{
+	    	.logout((logout)->{
+	    		logout
+	    			.logoutUrl("/user/logout")
+	    			.logoutSuccessUrl("/");
+	    	})
+	    	.authorizeHttpRequests(authorizeRequests -> {
 	    		/* ACL */
 	    		authorizeRequests
 	    			.requestMatchers(new RegexRequestMatcher("^/user/update$", null))
