@@ -74,7 +74,7 @@ public class SecurityConfig implements WebMvcConfigurer{
 	    			.hasAnyRole("ADMIN", "USER")
 	    			//.authenticated()
 	    			
-	    			.requestMatchers(new RegexRequestMatcher("^/board/?(write/modify/delete)$", null))
+	    			.requestMatchers(new RegexRequestMatcher("^/board/?(write|modify|delete)$", null))
 	    			.hasAnyRole("ADMIN", "USER")
 	    			//.authenticated()
 	    			
