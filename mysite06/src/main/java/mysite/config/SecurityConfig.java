@@ -4,6 +4,7 @@ package mysite.config;
 
 import java.io.IOException;
 
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
@@ -32,8 +33,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import mysite.repository.UserRepository;
 import mysite.security.UserDetailsServiceImpl;
 
-
-@Configuration
+@SpringBootConfiguration
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer{
 	
@@ -87,8 +87,8 @@ public class SecurityConfig implements WebMvcConfigurer{
 	    			
 	    			.anyRequest().permitAll(); 
 	    	})
-	    	.exceptionHandling((exceptionHandling)->{
-	    		//exceptionHandling.accessDeniedPage("/WEB-INF/views/errors/403.jsp");
+	    	/*.exceptionHandling((exceptionHandling)->{
+	    		//exceptionHandling.accessDeniedPage("/errors/403.jsp");
 	    		exceptionHandling.accessDeniedHandler(new AccessDeniedHandler() {
 
 					@Override
@@ -98,7 +98,7 @@ public class SecurityConfig implements WebMvcConfigurer{
 					}
 	    			
 	    		});
-	    	});
+	    	})*/;
     	return http.build();
     }
     
