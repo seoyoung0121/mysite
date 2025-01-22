@@ -29,8 +29,9 @@ public class DBConfig {
 		return dataSource;
 	}
 	
+	/*
 	@Bean
 	public TransactionManager transactionManager(DataSource dataSource) {
 		return new DataSourceTransactionManager(dataSource);
-	}
+	}*/
 }
