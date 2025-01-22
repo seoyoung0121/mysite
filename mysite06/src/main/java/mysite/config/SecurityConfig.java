@@ -1,4 +1,4 @@
-package mysite.config.app;
+package mysite.config;
 
 
 

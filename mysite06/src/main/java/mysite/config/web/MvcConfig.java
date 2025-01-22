@@ -1,21 +1,11 @@
 package mysite.config.web;
 
-import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
 
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -40,30 +30,6 @@ public class MvcConfig implements WebMvcConfigurer{
 		viewResolver.setExposeContextBeansAsAttributes(true);
 		viewResolver.setExposedContextBeanNames("site");
 		return viewResolver ;
-	}
-	
-	// MessageConverter
-	@Bean
-	public StringHttpMessageConverter stringHttpMessageConverter() {
-		StringHttpMessageConverter messageConverter = new StringHttpMessageConverter();
-		messageConverter.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "html", Charset.forName("utf-8"))));
-		return messageConverter;
-	}
-	
-	@Bean
-	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
-				.indentOutput(true)
-				.dateFormat(new SimpleDateFormat("yyy-MM-dd hh:mm:ss"));
-		MappingJackson2HttpMessageConverter messageConverter=new MappingJackson2HttpMessageConverter(builder.build());
-		messageConverter.setSupportedMediaTypes(Arrays.asList(new MediaType("application", "json", Charset.forName("utf-8"))));
-		return messageConverter;
-	}
-
-	@Override
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) { //Argument Resolvers
-		converters.add(stringHttpMessageConverter());
-		converters.add(mappingJackson2HttpMessageConverter());
 	}
 
 	// static(assets) url mapping
